@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -70,8 +73,5 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          artifacts/gh-archive-gui-linux/dist/gh-archive
-          artifacts/gh-archive-gui-windows.exe/dist/gh-archive.exe
-          artifacts/gh-archive-gui-macos/dist/gh-archive
+        files: artifacts/**/*
         token: ${{ secrets.GITHUB_TOKEN }}
