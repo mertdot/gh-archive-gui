@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
-        path: dist/gh-archive*
+        path: dist/
 
   release:
     needs: build
@@ -55,9 +55,6 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          artifacts/gh-archive-gui-linux/gh-archive
-          artifacts/gh-archive-gui-windows.exe/gh-archive.exe
-          artifacts/gh-archive-gui-macos/gh-archive
+        files: artifacts/**/gh-archive*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
