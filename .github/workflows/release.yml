@@ -40,13 +40,13 @@ jobs:
         pip install pyinstaller
         python -m pip uninstall enum34 -y
 
-    - name: Build executable
-      run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          xvfb-run pyinstaller --onefile --windowed gh-archive.py
-        else
-          pyinstaller --onefile --windowed gh-archive.py
-        fi
+    - name: Build executable (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: xvfb-run pyinstaller --onefile --windowed gh-archive.py
+
+    - name: Build executable (Windows/macOS)
+      if: matrix.os != 'ubuntu-latest'
+      run: pyinstaller --onefile --windowed gh-archive.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
