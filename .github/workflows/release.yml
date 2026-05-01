@@ -44,6 +44,7 @@ jobs:
         python -m pip uninstall -y enum34 || true
 
     - name: Build executable
+      shell: bash
       run: |
         if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
           xvfb-run pyinstaller --onefile --windowed gh-archive.py
