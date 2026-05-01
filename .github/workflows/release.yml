@@ -39,6 +39,10 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
+    - name: Remove enum34 for PyInstaller compatibility
+      run: |
+        python -m pip uninstall -y enum34 || true
+
     - name: Build executable
       run: |
         if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
