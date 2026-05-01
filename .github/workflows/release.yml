@@ -20,10 +20,10 @@ jobs:
             asset_name: gh-archive-gui-macos
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
 
@@ -38,7 +38,7 @@ jobs:
         pyinstaller --onefile --windowed gh-archive.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.asset_name }}
         path: dist/gh-archive*
@@ -48,47 +48,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         path: artifacts
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          artifacts/gh-archive-gui-linux/gh-archive
+          artifacts/gh-archive-gui-windows.exe/gh-archive.exe
+          artifacts/gh-archive-gui-macos/gh-archive
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Assets
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/gh-archive-gui-linux/gh-archive
-        asset_name: gh-archive-gui-linux
-        asset_content_type: application/octet-stream
-
-    - name: Upload Windows Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/gh-archive-gui-windows.exe/gh-archive.exe
-        asset_name: gh-archive-gui-windows.exe
-        asset_content_type: application/octet-stream
-
-    - name: Upload macOS Release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: artifacts/gh-archive-gui-macos/gh-archive
-        asset_name: gh-archive-gui-macos
-        asset_content_type: application/octet-stream
